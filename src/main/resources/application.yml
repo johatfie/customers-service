@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: customer-service
+  cloud:
+    loadbalancer.ribbon.enabled: false
+    gateway:
+      discovery.locator:
+        enabled: true
+        lowerCaseServiceId: true
+    bus:
+      enabled: true
+      refresh:
+        enabled: true
+    #stream:
+      #kafka:
+        #binder:
+          #zkNodes: localhost:9092 #,127.0.0.1:9092
+          #brokers: localhost:2181 #,127.0.1:2181
+  #rabbitmq:
+    #host: rabbitmq
+    #port: 5672
+    #username: user
+    #password: secret
+
+  #cloud:
+    #config:
+      ##uri: http://localhost:8071
+      #fail-fast: true
+      #retry:
+        #max-attempts: 20
+        #max-interval: 15000
+        #initial-interval: 10000
+  config:
+    import: 'optional:configserver:http://config-server:8071'
+
+server:
+  port: 8073
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka-server:8070/eureka/
+
+management:
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: '*'
+
