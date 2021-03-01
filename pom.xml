@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.widgets_are_us</groupId>
-	<artifactId>customer-service</artifactId>
+	<artifactId>customers-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>customer-service</name>
-	<description>Customer Service</description>
+	<name>customers-service</name>
+	<description>Customers Service</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.1</spring-cloud.version>
