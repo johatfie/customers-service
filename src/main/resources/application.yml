@@ -16,11 +16,16 @@ spring:
         #binder:
           #zkNodes: localhost:9092 #,127.0.0.1:9092
           #brokers: localhost:2181 #,127.0.1:2181
-  #rabbitmq:
-    #host: rabbitmq
-    #port: 5672
-    #username: user
-    #password: secret
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: user
+    password: secret
+  sleuth:
+    sampler:
+      percentage: 1
+  zipkin:
+    baseUrl: http://zipkin:9411
 
   #cloud:
     #config:
@@ -44,6 +49,7 @@ eureka:
     fetchRegistry: true
     serviceUrl:
       defaultZone: http://eureka-server:8070/eureka/
+
 
 management:
   endpoints:
