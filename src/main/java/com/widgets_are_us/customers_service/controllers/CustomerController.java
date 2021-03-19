@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/customer/")
 public class CustomerController {
 
-    CustomerRepository customerRepository;
-    CustomerService customerService;
+    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
     @Autowired
     public CustomerController(CustomerRepository customerRepository,
@@ -47,4 +47,5 @@ public class CustomerController {
     public String createCustomer(@RequestParam("customer") String customer) {
         return customerService.createCustomer(customer).toJson();
     }
+
 }

@@ -14,7 +14,7 @@ public class AddressService {
 
     private static final ObjectMapper mapper = new ObjectMapper();
 
-    private AddressRepository addressRepository;
+    private final AddressRepository addressRepository;
 
     @Autowired
     public AddressService(AddressRepository addressRepository) {
@@ -32,14 +32,14 @@ public class AddressService {
     }
 
 
-    public static Customer fromJson(String json) {
+    public static Address fromJson(String json) {
         try {
             log.info("Mapping Address from json");
             return mapper.readValue(json, Address.class);
         }
         catch(Exception e) {
             log.error(e.getClass().getName(), e.getMessage());
-            return new Customer();
+            return new Address();
         }
     }
 
