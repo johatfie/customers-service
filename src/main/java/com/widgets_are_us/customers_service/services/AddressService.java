@@ -2,7 +2,6 @@ package com.widgets_are_us.customers_service.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.widgets_are_us.customers_service.models.Address;
-import com.widgets_are_us.customers_service.models.Customer;
 import com.widgets_are_us.customers_service.repositories.AddressRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,6 @@ public class AddressService {
 
         return address;
     }
-
 
     public static Address fromJson(String json) {
         try {

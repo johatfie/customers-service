@@ -1,6 +1,10 @@
 package com.widgets_are_us.customers_service.controllers;
 
+import com.widgets_are_us.customers_service.models.Address;
+import com.widgets_are_us.customers_service.models.CompleteCustomer;
 import com.widgets_are_us.customers_service.models.Customer;
+import com.widgets_are_us.customers_service.models.CustomerAddress;
+import com.widgets_are_us.customers_service.repositories.CustomerAddressRepository;
 import com.widgets_are_us.customers_service.repositories.CustomerRepository;
 import com.widgets_are_us.customers_service.services.CustomerService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,17 +18,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/v1/customer/")
 public class CustomerController {
 
+    private final CustomerAddressRepository customerAddressRepository;
     private final CustomerRepository customerRepository;
     private final CustomerService customerService;
 
     @Autowired
-    public CustomerController(CustomerRepository customerRepository,
+    public CustomerController(CustomerAddressRepository customerAddressRepository,
+                              CustomerRepository customerRepository,
                               CustomerService customerService) {
+        this.customerAddressRepository = customerAddressRepository;
         this.customerRepository = customerRepository;
         this.customerService = customerService;
     }
@@ -42,10 +51,18 @@ public class CustomerController {
 
     @ResponseBody
     @PostMapping(value = "/new",
-            consumes = "application/json",
-            produces = "application/json")
-    public String createCustomer(@RequestParam("customer") String customer) {
-        return customerService.createCustomer(customer).toJson();
+            consumes = "application/json")
+    public Customer createCustomer(@RequestParam("customer") String customer) {
+        return customerService.createCustomer(customer);
     }
 
+    @ResponseBody
+    @GetMapping(value = "/{id}/complete")
+    public CompleteCustomer getCompleteCustomer(Long customerId) {
+        Customer customer = customerRepository.findCustomerById(customerId);
+        CustomerAddress defaultAddress = customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId);
+        List<CustomerAddress> addresses = customerAddressRepository.findByCustomerId(customerId);
+        
+        CompleteCustomer completeCustomer;
+    }
 }

@@ -1,0 +1,43 @@
+package com.widgets_are_us.customers_service.services;
+
+import com.widgets_are_us.customers_service.models.Address;
+import com.widgets_are_us.customers_service.models.Customer;
+import com.widgets_are_us.customers_service.models.CustomerAddress;
+import com.widgets_are_us.customers_service.repositories.CustomerAddressRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+public class CustomerAddressService {
+
+    private final CustomerAddressRepository customerAddressRepository;
+
+    @Autowired
+    public CustomerAddressService(CustomerAddressRepository customerAddressRepository) {
+        this.customerAddressRepository = customerAddressRepository;
+    }
+
+    public void linkCustomerToAddress(Long customerId, Long addressId, Boolean defaultAddress) {
+        customerAddressRepository.save(customerId, addressId, defaultAddress);
+    }
+
+    public void linkCustomerToAddress(Customer customer, Address address, Boolean defaultAddress) {
+
+        if(true == defaultAddress) {
+            removeDefaultAddress(customer.getId());
+        }
+
+        customerAddressRepository.save(customer.getId(), address.getId(), defaultAddress);
+    }
+
+    public void removeDefaultAddress(Long customerId) {
+        CustomerAddress defaultCustomerAddress =
+                customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId);
+
+        customerAddressRepository.save(defaultCustomerAddress.getCustomerId(),
+                defaultCustomerAddress.getCustomerId(), false);
+    }
+
+}
