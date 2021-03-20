@@ -26,18 +26,20 @@ public class CustomerAddressService {
     public void linkCustomerToAddress(Customer customer, Address address, Boolean defaultAddress) {
 
         if(true == defaultAddress) {
-            removeDefaultAddress(customer.getId());
+            removeDefaultFromCustomerAddress(customer.getId());
         }
 
         customerAddressRepository.save(customer.getId(), address.getId(), defaultAddress);
     }
 
-    public void removeDefaultAddress(Long customerId) {
+    public void removeDefaultFromCustomerAddress(Long customerId) {
         CustomerAddress defaultCustomerAddress =
                 customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId);
 
-        customerAddressRepository.save(defaultCustomerAddress.getCustomerId(),
-                defaultCustomerAddress.getCustomerId(), false);
+        if(defaultCustomerAddress != null) {
+            customerAddressRepository.save(defaultCustomerAddress.getCustomerId(),
+                    defaultCustomerAddress.getAddressId(), false);
+        }
     }
 
 }

@@ -36,6 +36,11 @@ public class Customer {
 
     private String businessName;
 
+    private String phoneNumber;
+
+    private String email;
+
+
     @Transient
     @JsonIgnore
     @Getter(AccessLevel.NONE)

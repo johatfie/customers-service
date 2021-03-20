@@ -39,6 +39,7 @@ public class Address {
 
     private String zipcode;
 
+    private String phoneNumber;
 
     @Transient
     @JsonIgnore
@@ -57,14 +58,14 @@ public class Address {
         }
     }
 
-    public static Customer fromJson(String json) {
+    public static Address fromJson(String json) {
         try {
             log.info("Mapping Address from json");
             return mapper.readValue(json, Address.class);
         }
         catch(Exception e) {
             log.error(e.getClass().getName(), e.getMessage());
-            return new Customer();
+            return new Address();
         }
     }
 

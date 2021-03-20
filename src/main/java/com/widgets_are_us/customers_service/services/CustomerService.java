@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
+    public static final String CUSTOMER_NOT_FOUND_FOR_THIS_ID = "Customer not found for this id :: ";
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     CustomerRepository customerRepository;
