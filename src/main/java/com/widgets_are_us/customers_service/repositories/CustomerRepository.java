@@ -10,12 +10,12 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-    Customer findById(Long id);
+    Optional<Customer> findById(Long id);
 
     List<Customer> findByFirstNameAndLastName(String firstName, String lastName);
     List<Customer> findByBusinessName(String businessName);
-    Optional<Customer> findByEmail(String email);
-    Optional<Customer> findByPhoneNumber(String phoneNumber);
+    List<Customer> findByEmail(String email);
+    List<Customer> findByPhoneNumber(String phoneNumber);
 
     void deleteCustomerById(Long id);
 

@@ -24,10 +24,12 @@ public class CustomerAddress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "fk_customer_id")
+    @Column(name = "fk_customer_id",
+            nullable = false)
     private Long customerId;
 
-    @Column(name = "fk_address_id")
+    @Column(name = "fk_address_id",
+            nullable = false)
     private Long addressId;
 
     private Boolean defaultAddress;

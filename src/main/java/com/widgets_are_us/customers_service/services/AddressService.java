@@ -33,31 +33,13 @@ public class AddressService {
         return address;
     }
 
-    public Address updateAddress(Long id, Address addressDetails) {
+    public Address replaceAddress(Long id, Address updatedAddress) {
 
-        Address address = addressRepository.findAddressById(id)
+        //Address address =
+        addressRepository.findAddressById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(ADDRESS_NOT_FOUND_FOR_THIS_ID + id));
 
-        if(addressDetails.getAddress1() != null) {
-            address.setAddress1(addressDetails.getAddress1());
-        }
-        if(addressDetails.getAddress2() != null) {
-            address.setAddress2(addressDetails.getAddress2());
-        }
-        if(addressDetails.getCity() != null) {
-            address.setCity(addressDetails.getCity());
-        }
-        if(addressDetails.getState() != null) {
-            address.setState(addressDetails.getState());
-        }
-        if(addressDetails.getZipcode() != null) {
-            address.setZipcode(addressDetails.getZipcode());
-        }
-        if(addressDetails.getPhoneNumber() != null) {
-            address.setPhoneNumber(addressDetails.getPhoneNumber());
-        }
-
-        Address updatedAddress = addressRepository.save(address);
+        updatedAddress = addressRepository.save(updatedAddress);
         log.debug(updatedAddress.toJson());
 
         return updatedAddress;

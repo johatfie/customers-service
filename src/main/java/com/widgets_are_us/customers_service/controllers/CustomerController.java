@@ -1,9 +1,11 @@
 package com.widgets_are_us.customers_service.controllers;
 
+import com.widgets_are_us.customers_service.exceptions.ResourceNotFoundException;
 import com.widgets_are_us.customers_service.models.Address;
 import com.widgets_are_us.customers_service.models.CompleteCustomer;
 import com.widgets_are_us.customers_service.models.Customer;
 import com.widgets_are_us.customers_service.models.CustomerAddress;
+import com.widgets_are_us.customers_service.repositories.AddressRepository;
 import com.widgets_are_us.customers_service.repositories.CustomerAddressRepository;
 import com.widgets_are_us.customers_service.repositories.CustomerRepository;
 import com.widgets_are_us.customers_service.services.CustomerService;
@@ -20,22 +22,25 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RestController
 @RequestMapping("/v1/customer/")
 public class CustomerController {
 
+    private final AddressRepository addressRepository;
     private final CustomerAddressRepository customerAddressRepository;
     private final CustomerRepository customerRepository;
     private final CustomerService customerService;
 
     @Autowired
-    public CustomerController(CustomerAddressRepository customerAddressRepository,
+    public CustomerController(AddressRepository addressRepository,
+                              CustomerAddressRepository customerAddressRepository,
                               CustomerRepository customerRepository,
                               CustomerService customerService) {
+        this.addressRepository = addressRepository;
         this.customerAddressRepository = customerAddressRepository;
         this.customerRepository = customerRepository;
         this.customerService = customerService;
@@ -44,13 +49,14 @@ public class CustomerController {
     @ResponseBody
     @GetMapping(value = "/{id}")
     public Customer findCustomerById(@PathVariable(value = "id") Long id) {
-        return customerRepository.findById(id);
+        return customerRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(CustomerService.CUSTOMER_NOT_FOUND_FOR_THIS_ID + id));
     }
 
     @ResponseBody
-    @GetMapping(value = "/findByFirstNameAndLastName/{firstName}/{lastName}")
-    public List<Customer> findByFirstNameAndLastName(@PathVariable(value = "firstName") String firstName,
-                                                     @PathVariable(value = "lastName") String lastName) {
+    @GetMapping(value = "/findByFirstNameAndLastName")
+    public List<Customer> findByFirstNameAndLastName(@RequestParam("firstName") String firstName,
+                                                     @RequestParam("lastName") String lastName) {
         return customerRepository.findByFirstNameAndLastName(firstName, lastName);
     }
 
@@ -62,13 +68,13 @@ public class CustomerController {
 
     @ResponseBody
     @GetMapping(value = "/findByEmail/{email}")
-    public Optional<Customer> findByEmail(@PathVariable(value = "email") String email) {
+    public List<Customer> findByEmail(@PathVariable(value = "email") String email) {
         return customerRepository.findByEmail(email);
     }
 
     @ResponseBody
     @GetMapping(value = "/findByPhoneNumber/{phoneNumber}")
-    public Optional<Customer> findByPhoneNumber(@PathVariable(value = "phoneNumber") String phoneNumber) {
+    public List<Customer> findByPhoneNumber(@PathVariable(value = "phoneNumber") String phoneNumber) {
         return customerRepository.findByPhoneNumber(phoneNumber);
     }
 
@@ -86,19 +92,33 @@ public class CustomerController {
 
     @ResponseBody
     @PutMapping(value = "/{id}")
-    public Customer updateCustomer(@PathVariable(value = "") Long id, @RequestBody Customer customer) {
-        return customerService.updateCustomer(id, customer);
+    public Customer replaceCustomer(@PathVariable(value = "id") Long id, @RequestBody Customer customer) {
+        return customerService.replaceCustomer(id, customer);
     }
 
     @ResponseBody
     @GetMapping(value = "/{id}/complete")
     public CompleteCustomer getCompleteCustomer(Long customerId) {
-        Customer customer = customerRepository.findById(customerId);
-        CustomerAddress defaultAddress = customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId);
+        Customer customer = customerRepository.findById(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException(CustomerService.CUSTOMER_NOT_FOUND_FOR_THIS_ID + customerId));
+        CustomerAddress defaultCustomerAddress = customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId);
+        Address defaultAddress = addressRepository.findAddressById(defaultCustomerAddress.getId()).orElse(null);
         List<CustomerAddress> addresses = customerAddressRepository.findByCustomerId(customerId);
+        //List<Long> addressIds = new ArrayList<>();
+        //List<Long> addressIds = addresses.stream().mapToLong(ca -> ca.getAddressId());
+        List<Address> foundAddresses = new ArrayList<>();
+        //addresses.stream().mapToLong(ca -> ca.getAddressId()).forEach(id ->
+               //foundAddresses.add(addressRepository.findAllById(id))
+                //);
+        foundAddresses.add(addressRepository.findAllById(addresses.stream().mapToLong(CustomerAddress::getAddressId)));
+
+        //for(CustomerAddress ca : addresses) {
+            //Address foundAddress = addressRepository.findAddressById(ca.getId());
+            //addressIds.add();
+        //}
 
         CompleteCustomer completeCustomer = CompleteCustomer.builder()
-                .customer(customer).defaultAddress(defaultAddress).addressList(addresses).build();
+                .customer(customer).defaultAddress(defaultAddress).addressList(foundAddresses).build();
         log.info("Complete customer assembled: " + completeCustomer.toJson());
 
         return completeCustomer;

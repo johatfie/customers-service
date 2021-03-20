@@ -34,7 +34,8 @@ public class AddressController {
     @ResponseBody
     @GetMapping(value = "/{id}")
     public Address findAddressById(@PathVariable(value = "id") Long id) {
-        return addressRepository.findAddressById(id);
+//        return addressRepository.findAddressById(id);
+        return null;
     }
 
     @DeleteMapping(value = "/{id}")
@@ -52,6 +53,7 @@ public class AddressController {
     @ResponseBody
     @PutMapping(value = "/{id}")
     public Address updateAddress(@PathVariable(value = "") Long id, @RequestBody Address address) {
-        return addressService.updateAddress(id, address);
+        return addressService.replaceAddress(id, address);
     }
+
 }
