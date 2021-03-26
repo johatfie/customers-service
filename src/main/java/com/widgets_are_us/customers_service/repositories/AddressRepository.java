@@ -17,8 +17,8 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
 
     Optional<Address> findAddressById(Long id);
 
-    @Override
-    List<Address> findAllById(Iterable<Long> iterable);
+    //@Override
+    //List<Address> findAllById(Iterable<Long> iterable);
 
-    Address findAllById(LongStream mapToLong);
+    List<Address> findAllById(LongStream mapToLong);
 }

@@ -100,19 +100,31 @@ public class CustomerController {
     @GetMapping(value = "/{id}/complete")
     public CompleteCustomer getCompleteCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException(CustomerService.CUSTOMER_NOT_FOUND_FOR_THIS_ID + customerId));
-        CustomerAddress defaultCustomerAddress = customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId);
-        Address defaultAddress = addressRepository.findAddressById(defaultCustomerAddress.getId()).orElse(null);
-        List<CustomerAddress> addresses = customerAddressRepository.findByCustomerId(customerId);
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(CustomerService.CUSTOMER_NOT_FOUND_FOR_THIS_ID + customerId));
+
+        CustomerAddress defaultCustomerAddress =
+                customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId).orElse(null);
+        Address defaultAddress = null;
+
+        if(defaultCustomerAddress != null) {
+            defaultAddress = addressRepository.findAddressById(defaultCustomerAddress.getId()).orElse(null);
+        }
+
+        List<CustomerAddress> customerAddresses = customerAddressRepository.findByCustomerId(customerId);
         //List<Long> addressIds = new ArrayList<>();
-        //List<Long> addressIds = addresses.stream().mapToLong(ca -> ca.getAddressId());
-        List<Address> foundAddresses = new ArrayList<>();
-        //addresses.stream().mapToLong(ca -> ca.getAddressId()).forEach(id ->
+        //List<Long> addressIds = customerAddresses.stream().mapToLong(ca -> ca.getAddressId());
+        //customerAddresses.stream().mapToLong(ca -> ca.getAddressId()).forEach(id ->
                //foundAddresses.add(addressRepository.findAllById(id))
                 //);
-        foundAddresses.add(addressRepository.findAllById(addresses.stream().mapToLong(CustomerAddress::getAddressId)));
+        List<Address> foundAddresses = null;
 
-        //for(CustomerAddress ca : addresses) {
+        if(!customerAddresses.isEmpty()) {
+            foundAddresses = new ArrayList<>(
+                    addressRepository.findAllById(customerAddresses.stream().mapToLong(CustomerAddress::getAddressId)));
+        }
+
+        //for(CustomerAddress ca : customerAddresses) {
             //Address foundAddress = addressRepository.findAddressById(ca.getId());
             //addressIds.add();
         //}

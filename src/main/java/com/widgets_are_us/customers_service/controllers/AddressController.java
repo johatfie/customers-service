@@ -1,5 +1,6 @@
 package com.widgets_are_us.customers_service.controllers;
 
+import com.widgets_are_us.customers_service.exceptions.ResourceNotFoundException;
 import com.widgets_are_us.customers_service.models.Address;
 import com.widgets_are_us.customers_service.repositories.AddressRepository;
 import com.widgets_are_us.customers_service.services.AddressService;
@@ -34,10 +35,11 @@ public class AddressController {
     @ResponseBody
     @GetMapping(value = "/{id}")
     public Address findAddressById(@PathVariable(value = "id") Long id) {
-//        return addressRepository.findAddressById(id);
-        return null;
+        return addressRepository.findAddressById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(AddressService.ADDRESS_NOT_FOUND_FOR_THIS_ID + id));
     }
 
+    @ResponseBody
     @DeleteMapping(value = "/{id}")
     public void deleteAddressById(@PathVariable(value = "id") Long id) {
         addressRepository.deleteAddressById(id);

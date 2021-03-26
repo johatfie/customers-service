@@ -6,13 +6,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CustomerAddressRepository extends JpaRepository<CustomerAddress, Long> {
     CustomerAddress save(Long customerId, Long id, Boolean defaultAddress);
 
     @Query("SELECT ca FROM CustomerAddress ca WHERE ca.customerId = :customerId AND ca.defaultAddress = true")
-    CustomerAddress findByCustomerIdWhereDefaultAddressIsTrue(Long customerId);
+    Optional<CustomerAddress> findByCustomerIdWhereDefaultAddressIsTrue(Long customerId);
 
     List<CustomerAddress> findByCustomerId(Long customerId);
     List<CustomerAddress> findByCustomerIdAndAddressId(Long customerId, Long addressId);
