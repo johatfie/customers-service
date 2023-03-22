@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/osx,vim,java,tags,linux,maven,gradle,eclipse,windows,intellij,netbeans,jetbrains,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=osx,vim,java,tags,linux,maven,gradle,eclipse,windows,intellij,netbeans,jetbrains,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/osx,vim,java,tags,linux,maven,gradle,eclipse,windows,intellij,netbeans,jetbrains,visualstudiocode,sonarqube
+# Edit at https://www.toptal.com/developers/gitignore?templates=osx,vim,java,tags,linux,maven,gradle,eclipse,windows,intellij,netbeans,jetbrains,visualstudiocode,sonarqube
 
 ### Eclipse ###
 .metadata
@@ -354,6 +354,19 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+### SonarQube ###
+# SonarQube ignore files.
+#
+# https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner
+# Sonar Scanner working directories
+.sonar/
+.sonarqube/
+.scannerwork/
+
+# http://www.sonarlint.org/commandline/
+# SonarLint working directories, configuration files (including credentials)
+.sonarlint/
+
 ### Tags ###
 # Ignore tags created by etags, ctags, gtags (GNU global) and cscope
 TAGS
@@ -462,4 +475,4 @@ gradle-app.setting
 # Java heap dump
 *.hprof
 
-# End of https://www.toptal.com/developers/gitignore/api/osx,vim,java,tags,linux,maven,gradle,eclipse,windows,intellij,netbeans,jetbrains,visualstudiocode
+# End of https://www.toptal.com/developers/gitignore/api/osx,vim,java,tags,linux,maven,gradle,eclipse,windows,intellij,netbeans,jetbrains,visualstudiocode,sonarqube
