@@ -4,7 +4,7 @@ import com.widgets_are_us.customers_service.exceptions.ResourceNotFoundException
 import com.widgets_are_us.customers_service.models.Address;
 import com.widgets_are_us.customers_service.repositories.AddressRepository;
 import com.widgets_are_us.customers_service.services.AddressService;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("/v1/address")
 public class AddressController {

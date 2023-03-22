@@ -9,11 +9,11 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor

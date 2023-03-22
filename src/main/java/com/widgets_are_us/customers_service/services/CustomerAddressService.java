@@ -4,11 +4,11 @@ import com.widgets_are_us.customers_service.models.Address;
 import com.widgets_are_us.customers_service.models.Customer;
 import com.widgets_are_us.customers_service.models.CustomerAddress;
 import com.widgets_are_us.customers_service.repositories.CustomerAddressRepository;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Slf4j
+@Log4j2
 @Service
 public class CustomerAddressService {
 

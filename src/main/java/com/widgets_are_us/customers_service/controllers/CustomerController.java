@@ -9,7 +9,7 @@ import com.widgets_are_us.customers_service.repositories.AddressRepository;
 import com.widgets_are_us.customers_service.repositories.CustomerAddressRepository;
 import com.widgets_are_us.customers_service.repositories.CustomerRepository;
 import com.widgets_are_us.customers_service.services.CustomerService;
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
+@Log4j2
 @RestController
 @RequestMapping("/v1/customer/")
 public class CustomerController {
