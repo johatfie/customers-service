@@ -23,9 +23,9 @@ public class CustomerAddressService {
         customerAddressRepository.save(customerId, addressId, defaultAddress);
     }
 
-    public void linkCustomerToAddress(Customer customer, Address address, Boolean defaultAddress) {
+    public void linkCustomerToAddress(Customer customer, Address address, boolean defaultAddress) {
 
-        if(true == defaultAddress) {
+        if(defaultAddress) {
             removeDefaultFromCustomerAddress(customer.getId());
         }
 
