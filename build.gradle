@@ -1,0 +1,114 @@
+plugins {
+	id 'java'
+	id 'idea'
+
+	id 'org.springframework.boot' version '2.7.9'
+	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+
+	id 'java-library'
+	id 'maven-publish'
+
+	id 'io.freefair.lombok' version '6.6.3'
+//	id 'com.github.spotbugs' version '5.0.5'
+//	id 'info.solidsoft.pitest' version '1.7.0' apply false
+//	id 'org.sonarqube' version '3.3' apply false
+}
+
+group = 'com.widgets_are_us'
+version = '0.0.1-SNAPSHOT'
+description = 'customers-service'
+sourceCompatibility = '17'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+//	mavenCentral()
+	mavenLocal()
+	maven {
+		url = uri('https://repo.maven.apache.org/maven2/')
+	}
+}
+
+ext {
+
+	dockerFileMavenPlugin = '1.4.13'
+	h2Version = '2.1.214'
+	logbackEncoderVersion = '7.3'
+	logbackVersion = '1.2.11'
+	lombokVersion = '1.18.26'
+	netflixEurekaClient = '4.0.0'
+	postgresqlVersion = '42.3.8'
+	springBootVersion = '2.7.9'
+	springCloudSleuth = '3.1.7'
+	springCloudStarterRibbon = '1.4.7.RELEASE'
+	springCloudStarters = '4.0.1'
+	springCloudVersion = '2021.0.6'
+
+}
+
+dependencies {
+	implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+//	implementation "org.springframework.boot:spring-boot-starter-logging:${springBootVersion}"
+	implementation("org.springframework.boot:spring-boot-starter-log4j2")
+
+	implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+
+	implementation "org.springframework.cloud:spring-cloud-bus:${springCloudStarters}"
+	implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudSleuth}"
+	implementation "org.springframework.cloud:spring-cloud-starter:${springCloudStarters}"
+	implementation "org.springframework.cloud:spring-cloud-starter-bus-amqp:${springCloudStarters}"
+	implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudStarters}"
+	implementation "org.springframework.cloud:spring-cloud-starter-loadbalancer:${springCloudStarters}"
+	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${netflixEurekaClient}"
+	implementation "org.springframework.cloud:spring-cloud-starter-ribbon:${springCloudStarterRibbon}"
+	implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudSleuth}"
+
+//	implementation "ch.qos.logback:logback-access:${logbackVersion}"
+//	implementation "ch.qos.logback:logback-classic:${logbackVersion}"
+//	implementation "net.logstash.logback:logstash-logback-encoder:${logbackEncoderVersion}"
+
+	implementation "com.spotify:dockerfile-maven-plugin:${dockerFileMavenPlugin}"
+
+//	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+	developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+
+	runtimeOnly "com.h2database:h2:${h2Version}"
+	runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
+
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
+//	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+	testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
+
+publishing {
+	publications {
+		maven(MavenPublication) {
+			from(components.java)
+		}
+	}
+}
+
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+tasks.withType(Javadoc) {
+	options.encoding = 'UTF-8'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
