@@ -34,7 +34,7 @@ public class CustomerAddressService {
 
     public void removeDefaultFromCustomerAddress(Long customerId) {
         CustomerAddress defaultCustomerAddress =
-                customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId);
+                customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId).orElse(null);
 
         if(defaultCustomerAddress != null) {
             customerAddressRepository.save(defaultCustomerAddress.getCustomerId(),
