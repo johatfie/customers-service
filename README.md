@@ -3,9 +3,9 @@
 Provides customers information for Widgets Are Us microservices project.
 
 ## Technologies
-- Java 11
-- Spring Boot 2.4.3
-- Spring Cloud 2020.0.1
+- Java 17
+- Spring Boot 2.7.10
+- Spring Cloud 2021.0.6
 - Spring Data JPA
 - Docker
 - PostgreSQL
@@ -20,4 +20,3 @@ Provides customers information for Widgets Are Us microservices project.
 - Registers itself with the Netflix-Eureka service discovery service
 - Logging is handled by an ElasticSearch, Logstash, and Kibana (ELK) stack
 - Zipkin is used for visualizing user transactions across multiple services
-
