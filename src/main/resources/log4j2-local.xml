@@ -6,7 +6,7 @@
         </Property>
     </Properties>
     <Appenders>
-        <Console name="STDOUT" target="SYSTEM_OUT">
+        <Console name="Console-Appender" target="SYSTEM_OUT">
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
     </Appenders>
