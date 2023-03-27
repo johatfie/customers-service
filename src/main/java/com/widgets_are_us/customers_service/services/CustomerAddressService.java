@@ -20,26 +20,35 @@ public class CustomerAddressService {
     }
 
     public void linkCustomerToAddress(Long customerId, Long addressId, Boolean defaultAddress) {
-        customerAddressRepository.save(customerId, addressId, defaultAddress);
-    }
+        List<CustomerAddress> customerAddresses = customerAddressRepository.findByCustomerIdAndAddressId(customerId,
+                addressId);
 
-    public void linkCustomerToAddress(Customer customer, Address address, boolean defaultAddress) {
-
-        if(defaultAddress) {
-            removeDefaultFromCustomerAddress(customer.getId());
+        if(customerAddresses.isEmpty()) {
+            customerAddressRepository.save(
+                    CustomerAddress.builder()
+                            .customerId(customerId)
+                            .addressId(addressId)
+                            .defaultAddress(defaultAddress)
+                            .build());
         }
-
-        customerAddressRepository.save(customer.getId(), address.getId(), defaultAddress);
     }
 
-    public void removeDefaultFromCustomerAddress(Long customerId) {
-        CustomerAddress defaultCustomerAddress =
+    public void linkCustomerToAddress(Customer customer, Address address, Boolean defaultAddress) {
+        linkCustomerToAddress(customer.getId(), address.getId(), defaultAddress);
+    }
+
+    public void makeDefaultCustomerAddressNonDefault(Long customerId) {
+        CustomerAddress defaultCustomerAddressToBeMadeNonDefault =
                 customerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(customerId).orElse(null);
 
-        if(defaultCustomerAddress != null) {
-            customerAddressRepository.save(defaultCustomerAddress.getCustomerId(),
-                    defaultCustomerAddress.getAddressId(), false);
+        if(defaultCustomerAddressToBeMadeNonDefault != null) {
+            defaultCustomerAddressToBeMadeNonDefault.setDefaultAddress(false);
+            customerAddressRepository.save(defaultCustomerAddressToBeMadeNonDefault);
         }
+    }
+
+    public void removeAddressFromCustomer(Customer customer, Address address) {
+        customerAddressRepository.deleteCustomerAddressByCustomerIdAndAddressId(customer.getId(), address.getId());
     }
 
 }
