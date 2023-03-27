@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--<Configuration packages="com.nike.rcfcommonv2.log">-->
 <Configuration >
     <Properties>
         <Property name="LOG_PATTERN">
@@ -18,14 +17,14 @@
         <asyncLogger name="org.apache" level="ERROR"/>
 <!--        <asyncLogger name="org.springframework" level="error" additivity="false">-->
         <asyncLogger name="org.springframework" level="info" additivity="false">
-            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="Console-Appender"/>
         </asyncLogger>
         <asyncLogger name="com.widgets_are_us" level="debug" additivity="false">
-            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="Console-Appender"/>
         </asyncLogger>
 
         <asyncRoot level="info" includeLocation="true">
-            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="Console-Appender"/>
         </asyncRoot>
     </Loggers>
 </Configuration>
