@@ -8,9 +8,18 @@
         <destination>logstash:5000</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
+<!--    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--&lt;!&ndash;        <encoder>&ndash;&gt;-->
+<!--&lt;!&ndash;            <pattern>[%thread] - %msg%n%stack{5,1024,10,rootFirst,omitCommonFrames,regex1,regex2,evaluatorName}</pattern>&ndash;&gt;-->
+<!--&lt;!&ndash;        </encoder>&ndash;&gt;-->
+<!--        <encoder>-->
+<!--            <pattern>%d{yyyy-MM-dd} | %d{HH:mm:ss.SSS} | %thread | %5p | %logger{25} | %12(ID: %8mdc{id}) | %m%n</pattern>-->
+<!--            <charset>utf8</charset>-->
+<!--        </encoder>-->
+<!--    </appender>-->
     <root level="INFO">
         <appender-ref ref="logstash"/>
-        <appender-ref ref="CONSOLE"/>
+<!--        <appender-ref ref="CONSOLE"/>-->
     </root>
     <logger name="org.springframework" level="INFO"/>
     <logger name="com.widgets_are_us" level="DEBUG"/>
