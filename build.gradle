@@ -23,6 +23,9 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
 }
 
 repositories {
@@ -37,54 +40,57 @@ ext {
 
 	dockerFileMavenPlugin = '1.4.13'
 	h2Version = '2.1.214'
+	log4jVersion = '2.17.2'
 	logbackEncoderVersion = '7.3'
-	logbackVersion = '1.2.11'
-	lombokVersion = '1.18.26'
-	netflixEurekaClient = '4.0.0'
 	postgresqlVersion = '42.3.8'
-	springBootVersion = '2.7.9'
-	springCloudSleuth = '3.1.7'
-	springCloudStarterRibbon = '1.4.7.RELEASE'
-	springCloudStarters = '4.0.1'
 	springCloudVersion = '2021.0.6'
 
 }
 
 dependencies {
-	implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
-//	implementation "org.springframework.boot:spring-boot-starter-logging:${springBootVersion}"
-	implementation("org.springframework.boot:spring-boot-starter-log4j2")
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation('org.springframework.boot:spring-boot-starter-log4j2')
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+	implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
+	implementation 'org.springframework.cloud:spring-cloud-starter-bus-amqp'
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+	implementation('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client') {
+		exclude group: 'org.springframework.cloud', module: 'spring-cloud-starter-ribbon'
+		exclude group: 'com.netflix.ribbon', module: 'ribbon-eureka'
+	}
+	implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
 
-	implementation "org.springframework.cloud:spring-cloud-bus:${springCloudStarters}"
-	implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudSleuth}"
-	implementation "org.springframework.cloud:spring-cloud-starter:${springCloudStarters}"
-	implementation "org.springframework.cloud:spring-cloud-starter-bus-amqp:${springCloudStarters}"
-	implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudStarters}"
-	implementation "org.springframework.cloud:spring-cloud-starter-loadbalancer:${springCloudStarters}"
-	implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${netflixEurekaClient}"
-	implementation "org.springframework.cloud:spring-cloud-starter-ribbon:${springCloudStarterRibbon}"
-	implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudSleuth}"
+	implementation "net.logstash.logback:logstash-logback-encoder:${logbackEncoderVersion}"
 
-//	implementation "ch.qos.logback:logback-access:${logbackVersion}"
-//	implementation "ch.qos.logback:logback-classic:${logbackVersion}"
-//	implementation "net.logstash.logback:logstash-logback-encoder:${logbackEncoderVersion}"
+//	implementation "com.spotify:dockerfile-maven-plugin:${dockerFileMavenPlugin}"
 
-	implementation "com.spotify:dockerfile-maven-plugin:${dockerFileMavenPlugin}"
+	implementation("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
+	implementation("org.apache.logging.log4j:log4j-api:${log4jVersion}")
+	implementation("org.apache.logging.log4j:log4j-core:${log4jVersion}")
 
-//	compileOnly "org.projectlombok:lombok:${lombokVersion}"
 
-	developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	runtimeOnly("com.lmax:disruptor:3.4.4")
 
 	runtimeOnly "com.h2database:h2:${h2Version}"
 	runtimeOnly "org.postgresql:postgresql:${postgresqlVersion}"
 
-	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springBootVersion}"
-//	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
-	testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+//	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Test dependencies
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'junit', module: 'junit'
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation('org.mockito:mockito-core:4.2.+')
+	testImplementation('org.mockito:mockito-junit-jupiter:4.2.+')
+
 }
 
 dependencyManagement {
