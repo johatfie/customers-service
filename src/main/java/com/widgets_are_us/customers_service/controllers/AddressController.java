@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,100 +31,101 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/address")
 public class AddressController {
 
-  private final AddressRepository addressRepository;
-  private final AddressService addressService;
+    private final AddressRepository addressRepository;
+    private final AddressService addressService;
 
-  @Operation(
-      summary = "Retrieve an address by Id",
-      description = "Get an address by specifying its id")
-  @ApiResponses({
-    @ApiResponse(
-        responseCode = "200",
-        content = {
-          @Content(
-              schema = @Schema(implementation = AddressDto.class),
-              mediaType = "application/json")
-        }),
-    @ApiResponse(
-        responseCode = "404",
-        description = "The address was not found",
-        content = {@Content(schema = @Schema())}),
-    @ApiResponse(
-        responseCode = "500",
-        content = {@Content(schema = @Schema())})
-  })
-  @ResponseBody
-  @GetMapping(value = "/{id}")
-  public Address findAddressById(@PathVariable(value = "id") Long id) {
-    return addressRepository
-        .findAddressById(id)
-        .orElseThrow(
-            () ->
-                new AddressNotFoundException(
-                    AddressService.ADDRESS_NOT_FOUND_FOR_THIS_ID.formatted(id)));
-  }
+    @Operation(
+            summary = "Retrieve an address by Id",
+            description = "Get an address by specifying its id")
+    @ApiResponses({
+        @ApiResponse(
+                responseCode = "200",
+                content = {
+                    @Content(
+                            schema = @Schema(implementation = AddressDto.class),
+                            mediaType = "application/json")
+                }),
+        @ApiResponse(
+                responseCode = "404",
+                description = "The address was not found",
+                content = {@Content(schema = @Schema())}),
+        @ApiResponse(
+                responseCode = "500",
+                content = {@Content(schema = @Schema())})
+    })
+    @ResponseBody
+    @GetMapping(value = "/{id}")
+    public Address findAddressById(@PathVariable(value = "id") Long id) {
+        return addressRepository
+                .findAddressById(id)
+                .orElseThrow(
+                        () ->
+                                new AddressNotFoundException(
+                                        AddressService.ADDRESS_NOT_FOUND_FOR_THIS_ID.formatted(
+                                                id)));
+    }
 
-  @Operation(
-      summary = "Delete an Address by Id",
-      description = "Delete a Address by specifying its id.")
-  @ApiResponses({
-    @ApiResponse(responseCode = "200", content = @Content(schema = @Schema())),
-    @ApiResponse(
-        responseCode = "404",
-        description = "The address was not found",
-        content = {@Content(schema = @Schema())}),
-    @ApiResponse(
-        responseCode = "500",
-        content = {@Content(schema = @Schema())})
-  })
-  @ResponseBody
-  @DeleteMapping(value = "/{id}")
-  public void deleteAddressById(@PathVariable(value = "id") Long id) {
-    addressRepository.deleteAddressById(id);
-  }
+    @Operation(
+            summary = "Delete an Address by Id",
+            description = "Delete a Address by specifying its id.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", content = @Content(schema = @Schema())),
+        @ApiResponse(
+                responseCode = "404",
+                description = "The address was not found",
+                content = {@Content(schema = @Schema())}),
+        @ApiResponse(
+                responseCode = "500",
+                content = {@Content(schema = @Schema())})
+    })
+    @ResponseBody
+    @DeleteMapping(value = "/{id}")
+    public void deleteAddressById(@PathVariable(value = "id") Long id) {
+        addressRepository.deleteAddressById(id);
+    }
 
-  @Operation(
-      summary = "Create a new Address",
-      description = "Create a Address by specifying its id.")
-  @ApiResponses({
-    @ApiResponse(
-        responseCode = "200",
-        content = {
-          @Content(
-              schema = @Schema(implementation = AddressDto.class),
-              mediaType = "application/json")
-        }),
-    @ApiResponse(
-        responseCode = "500",
-        content = {@Content(schema = @Schema())})
-  })
-  @ResponseBody
-  @PostMapping(value = "/new", consumes = "application/json")
-  public Address createAddress(@RequestParam("address") String address) {
-    return addressService.createAddress(address);
-  }
+    @Operation(
+            summary = "Create a new Address",
+            description = "Create a Address by specifying its id.")
+    @ApiResponses({
+        @ApiResponse(
+                responseCode = "200",
+                content = {
+                    @Content(
+                            schema = @Schema(implementation = AddressDto.class),
+                            mediaType = "application/json")
+                }),
+        @ApiResponse(
+                responseCode = "500",
+                content = {@Content(schema = @Schema())})
+    })
+    @ResponseBody
+    @PostMapping(value = "/new", consumes = "application/json")
+    public Address createAddress(@RequestParam("address") String address) {
+        return addressService.createAddress(address);
+    }
 
-  @Operation(summary = "Update an Address", description = "Replace an Address object")
-  @ApiResponses({
-    @ApiResponse(
-        responseCode = "200",
-        content = {
-          @Content(
-              schema = @Schema(implementation = AddressDto.class),
-              mediaType = "application/json")
-        }),
-    @ApiResponse(
-        responseCode = "404",
-        description = "The address was not found",
-        content = {@Content(schema = @Schema())}),
-    @ApiResponse(
-        responseCode = "500",
-        content = {@Content(schema = @Schema())})
-  })
-  @ResponseBody
-  @PutMapping(value = "/{id}")
-  public Address updateAddress(
-      @PathVariable(value = "id") Long id, @RequestBody AddressDto addressDto) {
-    return addressService.replaceAddress(id, new Address(addressDto));
-  }
+    @Operation(summary = "Update an Address", description = "Replace an Address object")
+    @ApiResponses({
+        @ApiResponse(
+                responseCode = "200",
+                content = {
+                    @Content(
+                            schema = @Schema(implementation = AddressDto.class),
+                            mediaType = "application/json")
+                }),
+        @ApiResponse(
+                responseCode = "404",
+                description = "The address was not found",
+                content = {@Content(schema = @Schema())}),
+        @ApiResponse(
+                responseCode = "500",
+                content = {@Content(schema = @Schema())})
+    })
+    @ResponseBody
+    @PutMapping(value = "/{id}")
+    public Address updateAddress(
+            @PathVariable(value = "id") Long id, @RequestBody AddressDto addressDto) {
+        return addressService.replaceAddress(id, new Address(addressDto));
+    }
 }

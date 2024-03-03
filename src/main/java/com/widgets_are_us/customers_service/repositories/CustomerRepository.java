@@ -9,17 +9,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
-  Optional<Customer> findById(Long id);
+    Optional<Customer> findById(Long id);
 
-  List<Customer> findByFirstNameAndLastName(String firstName, String lastName);
+    List<Customer> findByFirstNameAndLastName(String firstName, String lastName);
 
-  List<Customer> findByBusinessName(String businessName);
+    List<Customer> findByBusinessName(String businessName);
 
-  List<Customer> findByEmail(String email);
+    List<Customer> findByEmail(String email);
 
-  List<Customer> findByPhoneNumber(String phoneNumber);
+    List<Customer> findByPhoneNumber(String phoneNumber);
 
-  void deleteCustomerById(Long id);
+    void deleteCustomerById(Long id);
 
-  Customer save(Customer customer);
+    Customer save(Customer customer);
 }

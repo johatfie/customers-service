@@ -19,15 +19,15 @@ import lombok.extern.log4j.Log4j2;
 @AllArgsConstructor
 public class CustomerAddress {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  @Column(name = "fk_customer_id", nullable = false)
-  private Long customerId;
+    @Column(name = "fk_customer_id", nullable = false)
+    private Long customerId;
 
-  @Column(name = "fk_address_id", nullable = false)
-  private Long addressId;
+    @Column(name = "fk_address_id", nullable = false)
+    private Long addressId;
 
-  private Boolean defaultAddress;
+    private Boolean defaultAddress;
 }

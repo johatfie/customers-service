@@ -1,6 +1,5 @@
 package com.widgets_are_us.customers_service.exceptions;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 

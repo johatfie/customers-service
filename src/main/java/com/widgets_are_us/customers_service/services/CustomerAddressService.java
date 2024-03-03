@@ -14,40 +14,40 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class CustomerAddressService {
 
-  private final CustomerAddressRepository customerAddressRepository;
+    private final CustomerAddressRepository customerAddressRepository;
 
-  public void linkCustomerToAddress(Long customerId, Long addressId, Boolean defaultAddress) {
-    List<CustomerAddress> customerAddresses =
-        customerAddressRepository.findByCustomerIdAndAddressId(customerId, addressId);
+    public void linkCustomerToAddress(Long customerId, Long addressId, Boolean defaultAddress) {
+        List<CustomerAddress> customerAddresses =
+                customerAddressRepository.findByCustomerIdAndAddressId(customerId, addressId);
 
-    if (customerAddresses.isEmpty()) {
-      customerAddressRepository.save(
-          CustomerAddress.builder()
-              .customerId(customerId)
-              .addressId(addressId)
-              .defaultAddress(defaultAddress)
-              .build());
+        if (customerAddresses.isEmpty()) {
+            customerAddressRepository.save(
+                    CustomerAddress.builder()
+                            .customerId(customerId)
+                            .addressId(addressId)
+                            .defaultAddress(defaultAddress)
+                            .build());
+        }
     }
-  }
 
-  public void linkCustomerToAddress(Customer customer, Address address, Boolean defaultAddress) {
-    linkCustomerToAddress(customer.getId(), address.getId(), defaultAddress);
-  }
-
-  public void makeDefaultCustomerAddressNonDefault(Long customerId) {
-    CustomerAddress defaultCustomerAddressToBeMadeNonDefault =
-        customerAddressRepository
-            .findByCustomerIdWhereDefaultAddressIsTrue(customerId)
-            .orElse(null);
-
-    if (defaultCustomerAddressToBeMadeNonDefault != null) {
-      defaultCustomerAddressToBeMadeNonDefault.setDefaultAddress(false);
-      customerAddressRepository.save(defaultCustomerAddressToBeMadeNonDefault);
+    public void linkCustomerToAddress(Customer customer, Address address, Boolean defaultAddress) {
+        linkCustomerToAddress(customer.getId(), address.getId(), defaultAddress);
     }
-  }
 
-  public void removeAddressFromCustomer(Customer customer, Address address) {
-    customerAddressRepository.deleteCustomerAddressByCustomerIdAndAddressId(
-        customer.getId(), address.getId());
-  }
+    public void makeDefaultCustomerAddressNonDefault(Long customerId) {
+        CustomerAddress defaultCustomerAddressToBeMadeNonDefault =
+                customerAddressRepository
+                        .findByCustomerIdWhereDefaultAddressIsTrue(customerId)
+                        .orElse(null);
+
+        if (defaultCustomerAddressToBeMadeNonDefault != null) {
+            defaultCustomerAddressToBeMadeNonDefault.setDefaultAddress(false);
+            customerAddressRepository.save(defaultCustomerAddressToBeMadeNonDefault);
+        }
+    }
+
+    public void removeAddressFromCustomer(Customer customer, Address address) {
+        customerAddressRepository.deleteCustomerAddressByCustomerIdAndAddressId(
+                customer.getId(), address.getId());
+    }
 }

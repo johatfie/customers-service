@@ -10,16 +10,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CustomerAddressRepository extends JpaRepository<CustomerAddress, Long> {
 
-  //    CustomerAddress save(Long customerId, Long addressId, Boolean defaultAddress);
-  CustomerAddress save(CustomerAddress customerAddress);
+    //    CustomerAddress save(Long customerId, Long addressId, Boolean defaultAddress);
+    CustomerAddress save(CustomerAddress customerAddress);
 
-  @Query(
-      "SELECT ca FROM CustomerAddress ca WHERE ca.customerId = :customerId AND ca.defaultAddress = true")
-  Optional<CustomerAddress> findByCustomerIdWhereDefaultAddressIsTrue(Long customerId);
+    @Query(
+            "SELECT ca FROM CustomerAddress ca WHERE ca.customerId = :customerId AND"
+                    + " ca.defaultAddress = true")
+    Optional<CustomerAddress> findByCustomerIdWhereDefaultAddressIsTrue(Long customerId);
 
-  List<CustomerAddress> findByCustomerId(Long customerId);
+    List<CustomerAddress> findByCustomerId(Long customerId);
 
-  List<CustomerAddress> findByCustomerIdAndAddressId(Long customerId, Long addressId);
+    List<CustomerAddress> findByCustomerIdAndAddressId(Long customerId, Long addressId);
 
-  void deleteCustomerAddressByCustomerIdAndAddressId(Long customerId, Long AddressId);
+    void deleteCustomerAddressByCustomerIdAndAddressId(Long customerId, Long AddressId);
 }

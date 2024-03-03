@@ -31,117 +31,122 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 public class CustomerController {
 
-  private final AddressRepository addressRepository;
-  private final CustomerAddressRepository customerAddressRepository;
-  private final CustomerRepository customerRepository;
-  private final CustomerService customerService;
+    private final AddressRepository addressRepository;
+    private final CustomerAddressRepository customerAddressRepository;
+    private final CustomerRepository customerRepository;
+    private final CustomerService customerService;
 
-  @ResponseBody
-  @GetMapping(value = "/{id}")
-  public Customer findCustomerById(@PathVariable(value = "id") Long id) {
-    return customerRepository
-        .findById(id)
-        .orElseThrow(
-            () ->
-                new ResourceNotFoundException(
-                    CustomerService.CUSTOMER_NOT_FOUND_FOR_THIS_ID.formatted(id)));
-  }
-
-  @ResponseBody
-  @GetMapping(value = "/findByFirstNameAndLastName")
-  public List<Customer> findByFirstNameAndLastName(
-      @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName) {
-    return customerRepository.findByFirstNameAndLastName(firstName, lastName);
-  }
-
-  @ResponseBody
-  @GetMapping(value = "/findByBusinessName/{businessName}")
-  public List<Customer> findByBusinessName(
-      @PathVariable(value = "businessName") String businessName) {
-    return customerRepository.findByBusinessName(businessName);
-  }
-
-  @ResponseBody
-  @GetMapping(value = "/findByEmail/{email}")
-  public List<Customer> findByEmail(@PathVariable(value = "email") String email) {
-    return customerRepository.findByEmail(email);
-  }
-
-  @ResponseBody
-  @GetMapping(value = "/findByPhoneNumber/{phoneNumber}")
-  public List<Customer> findByPhoneNumber(@PathVariable(value = "phoneNumber") String phoneNumber) {
-    return customerRepository.findByPhoneNumber(phoneNumber);
-  }
-
-  @DeleteMapping(value = "/{id}")
-  public void deleteCustomerById(@PathVariable(value = "id") Long id) {
-    customerRepository.deleteCustomerById(id);
-  }
-
-  @ResponseBody
-  @PostMapping(value = "/new", consumes = "application/json")
-  public Customer createCustomer(@RequestParam("customer") String customer) {
-    return customerService.createCustomer(customer);
-  }
-
-  @ResponseBody
-  @PutMapping(value = "/{id}")
-  public Customer replaceCustomer(
-      @PathVariable(value = "id") Long id, @RequestBody CustomerDto customerDto) {
-    return customerService.replaceCustomer(id, customerDto);
-  }
-
-  @ResponseBody
-  @GetMapping(value = "/{id}/complete")
-  public CompleteCustomer getCompleteCustomer(Long customerId) {
-    Customer customer =
-        customerRepository
-            .findById(customerId)
-            .orElseThrow(
-                () ->
-                    new ResourceNotFoundException(
-                        CustomerService.CUSTOMER_NOT_FOUND_FOR_THIS_ID.formatted(customerId)));
-
-    CustomerAddress defaultCustomerAddress =
-        customerAddressRepository
-            .findByCustomerIdWhereDefaultAddressIsTrue(customerId)
-            .orElse(null);
-    Address defaultAddress = null;
-
-    if (defaultCustomerAddress != null) {
-      defaultAddress =
-          addressRepository.findAddressById(defaultCustomerAddress.getId()).orElse(null);
+    @ResponseBody
+    @GetMapping(value = "/{id}")
+    public Customer findCustomerById(@PathVariable(value = "id") Long id) {
+        return customerRepository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new ResourceNotFoundException(
+                                        CustomerService.CUSTOMER_NOT_FOUND_FOR_THIS_ID.formatted(
+                                                id)));
     }
 
-    List<CustomerAddress> customerAddresses =
-        customerAddressRepository.findByCustomerId(customerId);
-    // List<Long> addressIds = new ArrayList<>();
-    // List<Long> addressIds = customerAddresses.stream().mapToLong(ca -> ca.getAddressId());
-    // customerAddresses.stream().mapToLong(ca -> ca.getAddressId()).forEach(id ->
-    // foundAddresses.add(addressRepository.findAllById(id))
-    // );
-    List<Address> foundAddresses = null;
-
-    if (!customerAddresses.isEmpty()) {
-      foundAddresses =
-          new ArrayList<>(
-              addressRepository.findAllById(
-                  customerAddresses.stream().mapToLong(CustomerAddress::getAddressId)));
+    @ResponseBody
+    @GetMapping(value = "/findByFirstNameAndLastName")
+    public List<Customer> findByFirstNameAndLastName(
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName) {
+        return customerRepository.findByFirstNameAndLastName(firstName, lastName);
     }
 
-    // for(CustomerAddress ca : customerAddresses) {
-    // Address foundAddress = addressRepository.findAddressById(ca.getId());
-    // addressIds.add();
-    // }
+    @ResponseBody
+    @GetMapping(value = "/findByBusinessName/{businessName}")
+    public List<Customer> findByBusinessName(
+            @PathVariable(value = "businessName") String businessName) {
+        return customerRepository.findByBusinessName(businessName);
+    }
 
-    CompleteCustomer completeCustomer =
-        CompleteCustomer.builder()
-            .customer(customer)
-            .defaultAddress(defaultAddress)
-            .addressList(foundAddresses)
-            .build();
-    log.info("Complete customer assembled: " + completeCustomer.toJson());
+    @ResponseBody
+    @GetMapping(value = "/findByEmail/{email}")
+    public List<Customer> findByEmail(@PathVariable(value = "email") String email) {
+        return customerRepository.findByEmail(email);
+    }
 
-    return completeCustomer;
-  }
+    @ResponseBody
+    @GetMapping(value = "/findByPhoneNumber/{phoneNumber}")
+    public List<Customer> findByPhoneNumber(
+            @PathVariable(value = "phoneNumber") String phoneNumber) {
+        return customerRepository.findByPhoneNumber(phoneNumber);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void deleteCustomerById(@PathVariable(value = "id") Long id) {
+        customerRepository.deleteCustomerById(id);
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/new", consumes = "application/json")
+    public Customer createCustomer(@RequestParam("customer") String customer) {
+        return customerService.createCustomer(customer);
+    }
+
+    @ResponseBody
+    @PutMapping(value = "/{id}")
+    public Customer replaceCustomer(
+            @PathVariable(value = "id") Long id, @RequestBody CustomerDto customerDto) {
+        return customerService.replaceCustomer(id, customerDto);
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/{id}/complete")
+    public CompleteCustomer getCompleteCustomer(Long customerId) {
+        Customer customer =
+                customerRepository
+                        .findById(customerId)
+                        .orElseThrow(
+                                () ->
+                                        new ResourceNotFoundException(
+                                                CustomerService.CUSTOMER_NOT_FOUND_FOR_THIS_ID
+                                                        .formatted(customerId)));
+
+        CustomerAddress defaultCustomerAddress =
+                customerAddressRepository
+                        .findByCustomerIdWhereDefaultAddressIsTrue(customerId)
+                        .orElse(null);
+        Address defaultAddress = null;
+
+        if (defaultCustomerAddress != null) {
+            defaultAddress =
+                    addressRepository.findAddressById(defaultCustomerAddress.getId()).orElse(null);
+        }
+
+        List<CustomerAddress> customerAddresses =
+                customerAddressRepository.findByCustomerId(customerId);
+        // List<Long> addressIds = new ArrayList<>();
+        // List<Long> addressIds = customerAddresses.stream().mapToLong(ca -> ca.getAddressId());
+        // customerAddresses.stream().mapToLong(ca -> ca.getAddressId()).forEach(id ->
+        // foundAddresses.add(addressRepository.findAllById(id))
+        // );
+        List<Address> foundAddresses = null;
+
+        if (!customerAddresses.isEmpty()) {
+            foundAddresses =
+                    new ArrayList<>(
+                            addressRepository.findAllById(
+                                    customerAddresses.stream()
+                                            .mapToLong(CustomerAddress::getAddressId)));
+        }
+
+        // for(CustomerAddress ca : customerAddresses) {
+        // Address foundAddress = addressRepository.findAddressById(ca.getId());
+        // addressIds.add();
+        // }
+
+        CompleteCustomer completeCustomer =
+                CompleteCustomer.builder()
+                        .customer(customer)
+                        .defaultAddress(defaultAddress)
+                        .addressList(foundAddresses)
+                        .build();
+        log.info("Complete customer assembled: " + completeCustomer.toJson());
+
+        return completeCustomer;
+    }
 }

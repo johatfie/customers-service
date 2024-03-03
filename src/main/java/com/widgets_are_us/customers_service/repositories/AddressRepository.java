@@ -10,14 +10,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Long> {
 
-  Address save(Address address);
+    Address save(Address address);
 
-  void deleteAddressById(Long id);
+    void deleteAddressById(Long id);
 
-  Optional<Address> findAddressById(Long id);
+    Optional<Address> findAddressById(Long id);
 
-  // @Override
-  // List<Address> findAllById(Iterable<Long> iterable);
+    // @Override
+    // List<Address> findAllById(Iterable<Long> iterable);
 
-  List<Address> findAllById(LongStream mapToLong);
+    List<Address> findAllById(LongStream mapToLong);
 }

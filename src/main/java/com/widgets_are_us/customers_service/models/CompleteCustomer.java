@@ -19,24 +19,24 @@ import lombok.extern.log4j.Log4j2;
 @AllArgsConstructor
 public class CompleteCustomer {
 
-  private Customer customer;
+    private Customer customer;
 
-  private Address defaultAddress;
+    private Address defaultAddress;
 
-  private List<Address> addressList;
+    private List<Address> addressList;
 
-  @JsonIgnore
-  @Getter(AccessLevel.NONE)
-  @Setter(AccessLevel.NONE)
-  private static final ObjectMapper mapper = new ObjectMapper();
+    @JsonIgnore
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-  public String toJson() {
-    try {
-      log.info("Mapping complete customer to json");
-      return mapper.writeValueAsString(this);
-    } catch (Exception e) {
-      log.error(e.getClass().getName(), e.getMessage());
-      return "";
+    public String toJson() {
+        try {
+            log.info("Mapping complete customer to json");
+            return mapper.writeValueAsString(this);
+        } catch (Exception e) {
+            log.error(e.getClass().getName(), e.getMessage());
+            return "";
+        }
     }
-  }
 }

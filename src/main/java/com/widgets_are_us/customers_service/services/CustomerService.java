@@ -14,43 +14,45 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class CustomerService {
 
-  public static final String CUSTOMER_NOT_FOUND_FOR_THIS_ID =
-      "Customer not found for this id: [%s]";
+    public static final String CUSTOMER_NOT_FOUND_FOR_THIS_ID =
+            "Customer not found for this id: [%s]";
 
-  private static final ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper mapper = new ObjectMapper();
 
-  CustomerRepository customerRepository;
+    CustomerRepository customerRepository;
 
-  public Customer createCustomer(String json) {
+    public Customer createCustomer(String json) {
 
-    log.info("Mapping customer from json: " + json);
-    Customer customer = fromJson(json);
-    customer = customerRepository.save(customer);
-    log.debug("Customer created: " + customer);
+        log.info("Mapping customer from json: " + json);
+        Customer customer = fromJson(json);
+        customer = customerRepository.save(customer);
+        log.debug("Customer created: " + customer);
 
-    return customer;
-  }
-
-  public Customer replaceCustomer(Long id, CustomerDto updatedCustomerDto) {
-
-    customerRepository
-        .findById(id)
-        .orElseThrow(
-            () -> new ResourceNotFoundException(CUSTOMER_NOT_FOUND_FOR_THIS_ID.formatted(id)));
-
-    Customer updatedCustomer = customerRepository.save(new Customer(updatedCustomerDto));
-    log.debug(updatedCustomer.toJson());
-
-    return updatedCustomer;
-  }
-
-  public Customer fromJson(String json) {
-    try {
-      log.info("Mapping customer from json");
-      return new Customer(mapper.readValue(json, CustomerDto.class));
-    } catch (Exception e) {
-      log.error(e.getClass().getName(), e.getMessage());
-      return new Customer();
+        return customer;
     }
-  }
+
+    public Customer replaceCustomer(Long id, CustomerDto updatedCustomerDto) {
+
+        customerRepository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new ResourceNotFoundException(
+                                        CUSTOMER_NOT_FOUND_FOR_THIS_ID.formatted(id)));
+
+        Customer updatedCustomer = customerRepository.save(new Customer(updatedCustomerDto));
+        log.debug(updatedCustomer.toJson());
+
+        return updatedCustomer;
+    }
+
+    public Customer fromJson(String json) {
+        try {
+            log.info("Mapping customer from json");
+            return new Customer(mapper.readValue(json, CustomerDto.class));
+        } catch (Exception e) {
+            log.error(e.getClass().getName(), e.getMessage());
+            return new Customer();
+        }
+    }
 }
