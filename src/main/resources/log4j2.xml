@@ -2,7 +2,7 @@
 <Configuration>
     <Properties>
         <Property name="LOG_PATTERN">
-            %d{HH:mm:ss.SSS} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=green, TRACE=green} %style{${sys:PID}}{magenta} --- [%15.15t] %style{%-40.40c{1.}:%-20.20M:%-4.4L}{cyan} : %m%n%ex
+            %d{HH:mm:ss.SSS} %highlight{${LOG_LEVEL_PATTERN:-%5p}}{FATAL=red, ERROR=red, WARN=yellow, INFO=green, DEBUG=green, TRACE=green} %style{${sys:PID}}{magenta} --- [%15.15t] %style{%-40.40c{1.}:%-20.20M:%-4.4L}{cyan} %X{traceId} : %m%n%ex
         </Property>
     </Properties>
     <Appenders>

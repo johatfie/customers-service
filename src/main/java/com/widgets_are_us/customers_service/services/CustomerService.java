@@ -21,7 +21,6 @@ public class CustomerService {
 
   CustomerRepository customerRepository;
 
-
   public Customer createCustomer(String json) {
 
     log.info("Mapping customer from json: " + json);
@@ -44,17 +43,6 @@ public class CustomerService {
 
     return updatedCustomer;
   }
-
-  // public String toJson(Customer customer) {
-  // try {
-  // log.info("Mapping customer to json");
-  // return mapper.writeValueAsString(customer);
-  // }
-  // catch(Exception e) {
-  // log.error(e.getClass().getName(), e.getMessage());
-  // return "";
-  // }
-  // }
 
   public Customer fromJson(String json) {
     try {

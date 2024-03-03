@@ -20,7 +20,6 @@ public class AddressService {
 
   private final AddressRepository addressRepository;
 
-
   public Address createAddress(String json) {
 
     log.info("Mapping customer from json: [{}]", json);

@@ -16,7 +16,6 @@ public class CustomerAddressService {
 
   private final CustomerAddressRepository customerAddressRepository;
 
-
   public void linkCustomerToAddress(Long customerId, Long addressId, Boolean defaultAddress) {
     List<CustomerAddress> customerAddresses =
         customerAddressRepository.findByCustomerIdAndAddressId(customerId, addressId);
