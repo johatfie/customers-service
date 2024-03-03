@@ -8,7 +8,7 @@ plugins {
 	id 'java-library'
 	id 'maven-publish'
 
-	id 'io.freefair.lombok' version '6.6.3'
+	id 'io.freefair.lombok' version '8.6'
 //	id 'com.github.spotbugs' version '5.0.5'
 //	id 'info.solidsoft.pitest' version '1.7.0' apply false
 //	id 'org.sonarqube' version '3.3' apply false
@@ -42,6 +42,7 @@ ext {
 	h2Version = '2.1.214'
 	log4jVersion = '2.17.2'
 	logbackEncoderVersion = '7.3'
+	mockitoVersion = '4.5.1'
 	postgresqlVersion = '42.3.8'
 	springCloudVersion = '2021.0.6'
 
@@ -70,7 +71,7 @@ dependencies {
 	implementation("org.apache.logging.log4j:log4j-slf4j-impl:${log4jVersion}")
 	implementation("org.apache.logging.log4j:log4j-api:${log4jVersion}")
 	implementation("org.apache.logging.log4j:log4j-core:${log4jVersion}")
-
+	implementation('org.springdoc:springdoc-openapi-ui:1.6.15')
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
@@ -88,8 +89,8 @@ dependencies {
 		exclude group: 'junit', module: 'junit'
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
-	testImplementation('org.mockito:mockito-core:4.2.+')
-	testImplementation('org.mockito:mockito-junit-jupiter:4.2.+')
+	testImplementation("org.mockito:mockito-core:${mockitoVersion}")
+	testImplementation("org.mockito:mockito-junit-jupiter:${mockitoVersion}")
 
 }
 
