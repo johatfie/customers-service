@@ -1,15 +1,13 @@
-package com.widgets_are_us.customers_service.models;
+package com.widgets_are_us.customers_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.persistence.Entity;
+import com.widgets_are_us.customers_service.models.Address;
+import io.swagger.v3.oas.annotations.media.Schema;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Transient;
-
-import com.widgets_are_us.customers_service.dto.AddressDto;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,23 +17,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
-@Schema(description = "Address Model Information")
+@Schema(description = "Address DTO Information")
 @Log4j2
-@Entity
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Address {
+public class AddressDto {
 
-  public Address(AddressDto addressDto) {
-    this.id = addressDto.getId();
-    this.address1 = addressDto.getAddress1();
-    this.address2 = addressDto.getAddress2();
-    this.city = addressDto.getCity();
-    this.state = addressDto.getState();
-    this.zipcode = addressDto.getZipcode();
-    this.phoneNumber = addressDto.getPhoneNumber();
+  public AddressDto(Address address) {
+    this.id = address.getId();
+    this.address1 = address.getAddress1();
+    this.address2 = address.getAddress2();
+    this.city = address.getCity();
+    this.state = address.getState();
+    this.zipcode = address.getZipcode();
+    this.phoneNumber = address.getPhoneNumber();
   }
 
   @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "Address Id", example = "123")
@@ -77,13 +74,13 @@ public class Address {
     }
   }
 
-  public static Address fromJson(String json) {
+  public static AddressDto fromJson(String json) {
     try {
       log.info("Mapping Address from json");
-      return mapper.readValue(json, Address.class);
+      return mapper.readValue(json, AddressDto.class);
     } catch (Exception e) {
       log.error(e.getClass().getName(), e.getMessage());
-      return new Address();
+      return new AddressDto();
     }
   }
 }

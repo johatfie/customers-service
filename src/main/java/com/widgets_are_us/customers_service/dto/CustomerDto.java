@@ -1,8 +1,8 @@
-package com.widgets_are_us.customers_service.models;
+package com.widgets_are_us.customers_service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.widgets_are_us.customers_service.dto.CustomerDto;
+import com.widgets_are_us.customers_service.models.Customer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,22 +18,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
-@Schema(description = "Customer Model Information")
+@Schema(description = "Customer DTO Information")
 @Log4j2
-@Entity
 @Data
 @Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Customer {
+public class CustomerDto {
 
-  public Customer(CustomerDto customerDto) {
-    this.id = customerDto.getId();
-    this.firstName = customerDto.getFirstName();
-    this.lastName = customerDto.getLastName();
-    this.businessName = customerDto.getBusinessName();
-    this.phoneNumber = customerDto.getPhoneNumber();
-    this.email = customerDto.getEmail();
+  public CustomerDto(Customer customer) {
+    this.id = customer.getId();
+    this.firstName = customer.getFirstName();
+    this.lastName = customer.getLastName();
+    this.businessName = customer.getBusinessName();
+    this.phoneNumber = customer.getPhoneNumber();
+    this.email = customer.getEmail();
   }
 
   @Schema(accessMode = Schema.AccessMode.READ_ONLY, description = "Customer Id", example = "123")
@@ -72,10 +71,10 @@ public class Customer {
     }
   }
 
-  public static Customer fromJson(String json) {
+  public static CustomerDto fromJson(String json) {
     try {
       log.info("Mapping customer from json");
-      return mapper.readValue(json, Customer.class);
+      return mapper.readValue(json, CustomerDto.class);
     } catch (Exception e) {
       log.error(e.getClass().getName(), e.getMessage());
       return null;
