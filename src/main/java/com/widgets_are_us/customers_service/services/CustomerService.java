@@ -2,7 +2,7 @@ package com.widgets_are_us.customers_service.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.widgets_are_us.customers_service.dto.CustomerDto;
-import com.widgets_are_us.customers_service.exceptions.ResourceNotFoundException;
+import com.widgets_are_us.customers_service.exceptions.CustomerNotFoundException;
 import com.widgets_are_us.customers_service.models.Customer;
 import com.widgets_are_us.customers_service.repositories.CustomerRepository;
 import lombok.AllArgsConstructor;
@@ -37,7 +37,7 @@ public class CustomerService {
                 .findById(id)
                 .orElseThrow(
                         () ->
-                                new ResourceNotFoundException(
+                                new CustomerNotFoundException(
                                         CUSTOMER_NOT_FOUND_FOR_THIS_ID.formatted(id)));
 
         Customer updatedCustomer = customerRepository.save(new Customer(updatedCustomerDto));
