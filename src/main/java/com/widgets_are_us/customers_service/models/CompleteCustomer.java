@@ -2,6 +2,7 @@ package com.widgets_are_us.customers_service.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,7 @@ public class CompleteCustomer {
 
     private Address defaultAddress;
 
-    private List<Address> addressList;
+    @Builder.Default private List<Address> addressList = new ArrayList<>();
 
     @JsonIgnore
     @Getter(AccessLevel.NONE)

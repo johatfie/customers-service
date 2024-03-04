@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.widgets_are_us.customers_service.models.Address;
 import com.widgets_are_us.customers_service.models.CompleteCustomer;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -42,7 +43,8 @@ public class CompleteCustomerDto {
     private AddressDto defaultAddress;
 
     @Schema(description = "List of the addresses associated with the customer")
-    private List<AddressDto> addressList;
+    @Builder.Default
+    private List<AddressDto> addressList = new ArrayList<>();
 
     @JsonIgnore
     @Getter(AccessLevel.NONE)

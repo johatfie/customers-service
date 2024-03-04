@@ -5,12 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.widgets_are_us.customers_service.dto.CompleteCustomerDto;
 import com.widgets_are_us.customers_service.dto.CustomerDto;
 import com.widgets_are_us.customers_service.exceptions.CustomerNotFoundException;
+import com.widgets_are_us.customers_service.models.Address;
 import com.widgets_are_us.customers_service.models.Customer;
+import com.widgets_are_us.customers_service.models.CustomerAddress;
 import com.widgets_are_us.customers_service.repositories.AddressRepository;
 import com.widgets_are_us.customers_service.repositories.CustomerAddressRepository;
 import com.widgets_are_us.customers_service.repositories.CustomerRepository;
@@ -363,4 +367,106 @@ class CustomerControllerTest {
     }
 
     @Test
+    void getCompleteCustomer() {
+
+        // given
+        Long fakeCustomerId = 1L;
+        String fakeFirstName = "fakeFirstName";
+        String fakeLastName = "fakeLastName";
+        String fakeBusinessName = "fakeBusinessName";
+        String fakePhoneNumber = "fakePhoneNumber";
+        String fakeEmail = "fakeEmail";
+        Customer fakeCustomer =
+                Customer.builder()
+                        .id(fakeCustomerId)
+                        .firstName(fakeFirstName)
+                        .lastName(fakeLastName)
+                        .businessName(fakeBusinessName)
+                        .phoneNumber(fakePhoneNumber)
+                        .email(fakeEmail)
+                        .build();
+
+        Long fakeAddressId = 1L;
+        String fakeAddress1 = "fakeAddress1";
+        String fakeAddress2 = "fakeAddress2";
+        String fakeCity = "fakeCity";
+        String fakeState = "fakeState";
+        String fakeZipcode = "fakeZipcode";
+        String fakeAddressPhoneNumber = "fakeAddressPhoneNumber";
+        Address fakeAddress =
+                Address.builder()
+                        .id(fakeAddressId)
+                        .address1(fakeAddress1)
+                        .address2(fakeAddress2)
+                        .city(fakeCity)
+                        .state(fakeState)
+                        .zipcode(fakeZipcode)
+                        .phoneNumber(fakeAddressPhoneNumber)
+                        .build();
+
+        CustomerAddress fakeCustomerAddress =
+                CustomerAddress.builder()
+                        .id(2L)
+                        .customerId(fakeCustomerId)
+                        .addressId(fakeAddressId)
+                        .defaultAddress(true)
+                        .build();
+
+        // when
+        when(mockCustomerRepository.findById(fakeCustomerId))
+                .thenReturn(Optional.ofNullable(fakeCustomer));
+        when(mockCustomerAddressRepository.findByCustomerIdWhereDefaultAddressIsTrue(
+                        fakeCustomerId))
+                .thenReturn(Optional.ofNullable(fakeCustomerAddress));
+        when(mockCustomerAddressRepository.findByCustomerId(fakeCustomerId))
+                .thenReturn(List.of(fakeCustomerAddress));
+        when(mockAddressRepository.findAddressById(fakeAddressId))
+                .thenReturn(Optional.ofNullable(fakeAddress));
+        when(mockAddressRepository.findAllById(List.of(fakeAddressId)))
+                .thenReturn(List.of(fakeAddress));
+
+        CompleteCustomerDto result = customerController.getCompleteCustomer(fakeCustomerId);
+
+        // then
+        assertAll(
+                () -> assertNotNull(result),
+                () -> verify(mockCustomerRepository).findById(fakeCustomerId),
+                () ->
+                        verify(mockCustomerAddressRepository)
+                                .findByCustomerIdWhereDefaultAddressIsTrue(fakeCustomerId),
+                () -> verify(mockAddressRepository).findAddressById(fakeCustomerId),
+                () -> verify(mockAddressRepository).findAllById(anyList()),
+                () -> assertEquals(fakeCustomerId, result.getCustomerDto().getId()),
+                () -> assertEquals(fakeFirstName, result.getCustomerDto().getFirstName()),
+                () -> assertEquals(fakeLastName, result.getCustomerDto().getLastName()),
+                () -> assertEquals(fakeBusinessName, result.getCustomerDto().getBusinessName()),
+                () -> assertEquals(fakePhoneNumber, result.getCustomerDto().getPhoneNumber()),
+                () -> assertEquals(fakeEmail, result.getCustomerDto().getEmail()),
+                () -> assertNotNull(result.getDefaultAddress()),
+                () -> assertEquals(fakeAddressId, result.getDefaultAddress().getId()),
+                () -> assertEquals(fakeAddress1, result.getDefaultAddress().getAddress1()),
+                () -> assertEquals(fakeAddress2, result.getDefaultAddress().getAddress2()),
+                () -> assertEquals(fakeCity, result.getDefaultAddress().getCity()),
+                () -> assertEquals(fakeState, result.getDefaultAddress().getState()),
+                () -> assertEquals(fakeZipcode, result.getDefaultAddress().getZipcode()),
+                () ->
+                        assertEquals(
+                                fakeAddressPhoneNumber,
+                                result.getDefaultAddress().getPhoneNumber()),
+                () -> assertNotNull(result.getAddressList()),
+                () -> assertFalse(result.getAddressList().isEmpty()),
+                () -> assertEquals(1, result.getAddressList().size()),
+                () -> assertNotNull(result.getAddressList().get(0)),
+                () -> assertEquals(fakeAddressId, result.getAddressList().get(0).getId()),
+                () -> assertEquals(fakeAddressId, result.getAddressList().get(0).getId()),
+                () -> assertEquals(fakeAddress1, result.getAddressList().get(0).getAddress1()),
+                () -> assertEquals(fakeAddress2, result.getAddressList().get(0).getAddress2()),
+                () -> assertEquals(fakeCity, result.getAddressList().get(0).getCity()),
+                () -> assertEquals(fakeState, result.getAddressList().get(0).getState()),
+                () -> assertEquals(fakeZipcode, result.getAddressList().get(0).getZipcode()),
+                () ->
+                        assertEquals(
+                                fakeAddressPhoneNumber,
+                                result.getAddressList().get(0).getPhoneNumber()));
+    }
 }

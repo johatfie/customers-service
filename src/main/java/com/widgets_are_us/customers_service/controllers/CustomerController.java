@@ -306,16 +306,14 @@ public class CustomerController {
 
         if (defaultCustomerAddress != null) {
             defaultAddress =
-                    addressRepository.findAddressById(defaultCustomerAddress.getId()).orElse(null);
+                    addressRepository
+                            .findAddressById(defaultCustomerAddress.getAddressId())
+                            .orElse(null);
         }
 
         List<CustomerAddress> customerAddresses =
                 customerAddressRepository.findByCustomerId(customerId);
-        // List<Long> addressIds = new ArrayList<>();
-        // List<Long> addressIds = customerAddresses.stream().mapToLong(ca -> ca.getAddressId());
-        // customerAddresses.stream().mapToLong(ca -> ca.getAddressId()).forEach(id ->
-        // foundAddresses.add(addressRepository.findAllById(id))
-        // );
+
         List<Address> foundAddresses = null;
 
         if (!customerAddresses.isEmpty()) {
@@ -323,13 +321,16 @@ public class CustomerController {
                     new ArrayList<>(
                             addressRepository.findAllById(
                                     customerAddresses.stream()
-                                            .mapToLong(CustomerAddress::getAddressId)));
+                                            .mapToLong(CustomerAddress::getAddressId)
+                                            .boxed()
+                                            .toList()));
+            log.debug(
+                    "customer address ids: "
+                            + customerAddresses.stream()
+                                    .mapToLong(CustomerAddress::getAddressId)
+                                    .boxed()
+                                    .toList());
         }
-
-        // for(CustomerAddress ca : customerAddresses) {
-        // Address foundAddress = addressRepository.findAddressById(ca.getId());
-        // addressIds.add();
-        // }
 
         CompleteCustomer completeCustomer =
                 CompleteCustomer.builder()
@@ -337,7 +338,8 @@ public class CustomerController {
                         .defaultAddress(defaultAddress)
                         .addressList(foundAddresses)
                         .build();
-        log.info("Complete customer assembled: " + completeCustomer.toJson());
+        log.debug("Complete customer assembled toString: " + completeCustomer);
+        log.info("Complete customer assembled toJson: " + completeCustomer.toJson());
 
         return new CompleteCustomerDto(completeCustomer);
     }
