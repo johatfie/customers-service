@@ -264,14 +264,103 @@ class CustomerControllerTest {
     }
 
     @Test
-    void deleteCustomerById() {}
+    void deleteCustomerById() {
+
+        // given
+        Long fakeCustomerId = 1L;
+
+        // when
+        customerController.deleteCustomerById(fakeCustomerId);
+
+        // then
+        verify(mockCustomerRepository).deleteCustomerById(fakeCustomerId);
+    }
 
     @Test
-    void createCustomer() {}
+    void createCustomer() {
+
+        // given
+        Long fakeCustomerId = 1L;
+        String fakeFirstName = "fakeFirstName";
+        String fakeLastName = "fakeLastName";
+        String fakeBusinessName = "fakeBusinessName";
+        String fakePhoneNumber = "fakePhoneNumber";
+        String fakeEmail = "fakeEmail";
+        String fakeCustomerString =
+                "Customer(id=1, firstName=fakeFirstName, lastName=fakeLastName,"
+                        + " businessName=fakeBusinessName, phoneNumber=fakePhoneNumber,"
+                        + " email=fakeEmail)";
+        Customer fakeCustomer =
+                Customer.builder()
+                        .id(fakeCustomerId)
+                        .firstName(fakeFirstName)
+                        .lastName(fakeLastName)
+                        .businessName(fakeBusinessName)
+                        .phoneNumber(fakePhoneNumber)
+                        .email(fakeEmail)
+                        .build();
+
+        // when
+        when(mockCustomerService.createCustomer(fakeCustomerString)).thenReturn(fakeCustomer);
+        CustomerDto result = customerController.createCustomer(fakeCustomerString);
+
+        // then
+        assertAll(
+                () -> assertNotNull(result),
+                () -> verify(mockCustomerService).createCustomer(fakeCustomerString),
+                () -> assertEquals(fakeCustomerId, result.getId()),
+                () -> assertEquals(fakeFirstName, result.getFirstName()),
+                () -> assertEquals(fakeLastName, result.getLastName()),
+                () -> assertEquals(fakeBusinessName, result.getBusinessName()),
+                () -> assertEquals(fakePhoneNumber, result.getPhoneNumber()),
+                () -> assertEquals(fakeEmail, result.getEmail()));
+    }
 
     @Test
-    void replaceCustomer() {}
+    void replaceCustomer() {
+
+        // given
+        Long fakeCustomerId = 1L;
+        String fakeFirstName = "fakeFirstName";
+        String fakeLastName = "fakeLastName";
+        String fakeBusinessName = "fakeBusinessName";
+        String fakePhoneNumber = "fakePhoneNumber";
+        String fakeEmail = "fakeEmail";
+        Customer fakeCustomer =
+                Customer.builder()
+                        .id(fakeCustomerId)
+                        .firstName(fakeFirstName)
+                        .lastName(fakeLastName)
+                        .businessName(fakeBusinessName)
+                        .phoneNumber(fakePhoneNumber)
+                        .email(fakeEmail)
+                        .build();
+        CustomerDto fakeCustomerDto =
+                CustomerDto.builder()
+                        .id(fakeCustomerId)
+                        .firstName(fakeFirstName)
+                        .lastName(fakeLastName)
+                        .businessName(fakeBusinessName)
+                        .phoneNumber(fakePhoneNumber)
+                        .email(fakeEmail)
+                        .build();
+
+        // when
+        when(mockCustomerService.replaceCustomer(fakeCustomerId, fakeCustomerDto))
+                .thenReturn(fakeCustomer);
+        CustomerDto result = customerController.replaceCustomer(fakeCustomerId, fakeCustomerDto);
+
+        // then
+        assertAll(
+                () -> assertNotNull(result),
+                () -> verify(mockCustomerService).replaceCustomer(fakeCustomerId, fakeCustomerDto),
+                () -> assertEquals(fakeCustomerId, result.getId()),
+                () -> assertEquals(fakeFirstName, result.getFirstName()),
+                () -> assertEquals(fakeLastName, result.getLastName()),
+                () -> assertEquals(fakeBusinessName, result.getBusinessName()),
+                () -> assertEquals(fakePhoneNumber, result.getPhoneNumber()),
+                () -> assertEquals(fakeEmail, result.getEmail()));
+    }
 
     @Test
-    void getCompleteCustomer() {}
 }
